@@ -1,24 +1,23 @@
 #imports
-from flask import Flask, request
-import werkzeug
-import flask.scaffold
-
-#setup
-werkzeug.cached_property = werkzeug.utils.cached_property
-flask.helpers._endpoint_from_view_func = flask.scaffold._endpoint_from_view_func
+from mission_control.scriptSchedule import scriptSchedule
+from mission_control.scriptController import *
 
 
-#Register API endpoints
-from api_endpoints import blueprint as documented_endpoint
-
-app = Flask(__name__)
-app.config['RESTPLUS_MASK_SWAGGER'] = False
-app.register_blueprint(documented_endpoint)
+sched = None
 
 
+def intializeScheduler():
+    global sched
+    sched = scriptSchedule()
+    sched.scheduleAutoUpdate()
+    sched.scheduleScript("Stock-Analyser", 1)
+    sched.startSchedule()
+
+
+def main():
+    print("***** Starting Mission Control ***** \n")
+    intializeScheduler()
 
 if __name__ == '__main__':
-    print("***** Starting Mission Control ***** \n")
-    app.run()
+    main()
     
-
