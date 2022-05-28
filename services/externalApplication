@@ -1,0 +1,11 @@
+import runpy
+import traceback
+
+
+def runApplication(applicationName):
+    path = "{}/app.py".format(applicationName)
+    try:
+        runpy.run_path(path_name='path')    
+    except Exception as e:
+        print(traceback.format_exc())
+        print(e)
